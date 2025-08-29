@@ -29,9 +29,12 @@ class Websitemail extends Mailable
      * @return $this
      */
     public function build()
-    {
-        return $this->view('email.email')->with([
-            'subject' => $this->subject
-        ]);
-    }
+{
+    return $this->subject($this->subject) // Set the email subject line
+                ->view('email.email')     // The Blade view
+                ->with([
+                    'body' => $this->body // Pass body to the view
+                ]);
+}
+
 }

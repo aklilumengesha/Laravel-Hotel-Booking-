@@ -10,7 +10,8 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $room_all = Room::paginate(12);
+        
+        $room_all = Room::with('reviews')->paginate(12);
         return view('front.room', compact('room_all'));
     }
 

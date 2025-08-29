@@ -30,7 +30,7 @@ class CustomerAuthController extends Controller
         ];
 
         if(Auth::guard('customer')->attempt($credential)) {
-            return redirect()->route('customer_home');
+            return redirect()->route('home');
         } else {            
             return redirect()->route('customer_login')->with('error', 'Information is not correct!');
         }
@@ -76,22 +76,25 @@ class CustomerAuthController extends Controller
 
     }
 
-    public function signup_verify($email,$token)
-    {
-        $customer_data = Customer::where('email',$email)->where('token',$token)->first();
+    public function signup_verify($email, $token)
+{
+    $customer_data = Customer::where('email', $email)->where('token', $token)->first();
 
-        if($customer_data) {
-            
-            $customer_data->token = '';
-            $customer_data->status = 1;
-            $customer_data->update();
+    if ($customer_data) {
+        $customer_data->token = '';
+        $customer_data->status = 1;
+        $customer_data->update();
 
-            return redirect()->route('customer_login')->with('success', 'Your account is verified successfully!');
+        // ✅ Auto-login the customer
+        Auth::guard('customer')->login($customer_data);
 
-        } else {
-            return redirect()->route('customer_login');
-        }
+        // ✅ Redirect to homepage or dashboard
+        return redirect()->route('home')->with('success', 'Your account is verified and you are now logged in!');
+    } else {
+        return redirect()->route('customer_login')->with('error', 'Invalid verification link.');
     }
+}
+
 
     public function logout()
     {

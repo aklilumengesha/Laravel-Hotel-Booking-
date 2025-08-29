@@ -1,4 +1,4 @@
-@extends('front.layout.app')
+ @extends('front.layout.app')
 
 @section('main_content')
 <div class="page-top">
@@ -50,3 +50,5 @@
     </div>
 </div>
 @endsection
+
+

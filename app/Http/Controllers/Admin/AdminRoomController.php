@@ -62,6 +62,9 @@ class AdminRoomController extends Controller
         $obj->total_balconies = $request->total_balconies;
         $obj->total_guests = $request->total_guests;
         $obj->video_id = $request->video_id;
+        $obj->bed = $request->bed;
+        $obj->bath = $request->bath;
+
         $obj->save();
 
         return redirect()->back()->with('success', 'Room is added successfully.');
@@ -101,7 +104,9 @@ class AdminRoomController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'total_rooms' => 'required'
+            'total_rooms' => 'required',
+            'bed' => 'required|numeric',
+            'bath' => 'required|numeric',
         ]);
 
         if($request->hasFile('featured_photo')) {

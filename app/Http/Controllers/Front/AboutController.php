@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Page;
+use App\Models\AboutPage;
 
 class AboutController extends Controller
 {
     public function index()
     {
-        $about_data = Page::where('id',1)->first();
+        $about_data = AboutPage::first();
         return view('front.about', compact('about_data'));
     }
 }

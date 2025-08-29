@@ -26,6 +26,31 @@
                         <div class="price">
                             ${{ $item->price }}/night
                         </div>
+                        @php
+    $avgRating = round($item->averageRating(), 1);
+    $ratingCount = $item->ratingCount();
+@endphp
+
+<!-- @if($ratingCount > 0)
+@php
+    dump($item->reviews); // TEMPORARY
+@endphp -->
+
+    <div class="rating text-warning mb-2">
+        @for ($i = 1; $i <= 5; $i++)
+            @if ($i <= floor($avgRating))
+                ★
+            @elseif ($i - $avgRating < 1)
+                ☆
+            @else
+                ☆
+            @endif
+        @endfor
+        <span class="text-dark">{{ $avgRating }} / 5</span>
+        <small>({{ $ratingCount }} {{ Str::plural('rating', $ratingCount) }})</small>
+    </div>
+@endif
+
                         <div class="button">
                             <a href="{{ route('room_detail',$item->id) }}" class="btn btn-primary">See Detail</a>
                         </div>

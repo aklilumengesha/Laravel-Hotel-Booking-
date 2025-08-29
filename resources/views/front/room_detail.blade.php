@@ -16,6 +16,54 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-7 col-sm-12 left">
+                @if(Auth::guard('customer')->check())
+    @php
+        $customer_id = Auth::guard('customer')->id();
+        $hasBooked = \App\Models\OrderDetail::where('room_id', $single_room_data->id)
+                        ->whereHas('order', function($q) use ($customer_id) {
+                            $q->where('customer_id', $customer_id);
+                        })->exists();
+
+        $alreadyReviewed = \App\Models\Review::where('room_id', $single_room_data->id)
+                        ->where('customer_id', $customer_id)
+                        ->exists();
+    @endphp
+
+    @if($hasBooked && !$alreadyReviewed)
+        <div class="review-form mt-5">
+            <h3>Leave a Review</h3>
+            <form action="{{ route('room_review_store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="room_id" value="{{ $single_room_data->id }}">
+                <div class="form-group">
+                    <label for="rating">Rating (1 to 5)</label>
+                    <input type="number" name="rating" min="1" max="5" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea name="comment" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Submit Review</button>
+            </form>
+        </div>
+    @elseif($alreadyReviewed)
+        <p class="text-info">You already reviewed this room.</p>
+    @endif
+@else
+    <p class="text-warning">Login to leave a review.</p>
+@endif
+      <div class="reviews mt-5">
+    <h3>Customer Reviews</h3>
+    @forelse($single_room_data->reviews as $review)
+        <div class="border p-3 mb-2">
+            <strong>{{ $review->customer->name ?? 'Customer' }}</strong>
+            <div>Rating: {{ $review->rating }} ⭐</div>
+            <p>{{ $review->comment }}</p>
+        </div>
+    @empty
+        <p>No reviews yet.</p>
+    @endforelse
+</div>
 
                 <div class="room-detail-carousel owl-carousel">
                     <div class="item" style="background-image:url({{ asset('uploads/'.$single_room_data->featured_photo) }});">
@@ -34,24 +82,27 @@
                     {!! $single_room_data->description !!}
                 </div>
 
-                <div class="amenity">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Amenities</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @php
-                        $arr = explode(',',$single_room_data->amenities);
-                        for($j=0;$j<count($arr);$j++) {
-                            $temp_row = \App\Models\Amenity::where('id',$arr[$j])->first();
-                            echo '<div class="col-lg-6 col-md-12">';
-                            echo '<div class="item"><i class="fa fa-check-circle"></i> '.$temp_row->name.'</div>';
-                            echo '</div>';
-                        }
-                        @endphp
-                    </div>
-                </div>
+               <div class="amenity">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Amenities</h2>
+        </div>
+    </div>
+    <div class="row">
+        @php
+        $arr = explode(',', $single_room_data->amenities);
+        for ($j = 0; $j < count($arr); $j++) {
+            $temp_row = \App\Models\Amenity::find($arr[$j]); // Cleaner and faster than where()->first()
+            if ($temp_row) {
+                echo '<div class="col-lg-6 col-md-12">';
+                echo '<div class="item"><i class="fa fa-check-circle"></i> ' . $temp_row->name . '</div>';
+                echo '</div>';
+            }
+        }
+        @endphp
+    </div>
+</div>
+
 
 
                 <div class="feature">

@@ -56,13 +56,22 @@
                                     <input type="text" class="form-control" name="size" value="{{ old('size') }}">
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Beds</label>
-                                    <input type="text" class="form-control" name="total_beds" value="{{ old('total_beds') }}">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Bathrooms</label>
-                                    <input type="text" class="form-control" name="total_bathrooms" value="{{ old('total_bathrooms') }}">
-                                </div>
+    <label class="form-label">Beds</label>
+    <input type="text" class="form-control" name="total_beds" value="{{ old('total_beds') }}">
+</div>
+<div class="mb-4">
+    <label class="form-label">Bed *</label>
+    <input type="text" class="form-control" name="bed" value="{{ old('bed') }}">
+</div>
+<div class="mb-4">
+    <label class="form-label">Bathrooms</label>
+    <input type="text" class="form-control" name="total_bathrooms" value="{{ old('total_bathrooms') }}">
+</div>
+<div class="mb-4">
+    <label class="form-label">Bath *</label>
+    <input type="text" class="form-control" name="bath" value="{{ old('bath') }}">
+</div>
+
                                 <div class="mb-4">
                                     <label class="form-label">Balconies</label>
                                     <input type="text" class="form-control" name="total_balconies" value="{{ old('total_balconies') }}">

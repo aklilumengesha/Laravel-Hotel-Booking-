@@ -13,4 +13,22 @@ class Room extends Model
     {
         return $this->hasMany(RoomPhoto::class);
     }
+//     public function reviews()
+// {
+//     return $this->hasMany(Review::class);
+// }
+    public function averageRating()
+{
+    return $this->reviews()->avg('rating');
+}
+    public function reviews()
+{
+    return $this->hasMany(\App\Models\Review::class);
+}
+
+public function ratingCount()
+{
+    return $this->reviews()->count();
+}
+
 }

@@ -26,6 +26,11 @@
                                     <label class="form-label">Heading *</label>
                                     <input type="text" class="form-control" name="heading" value="{{ old('heading') }}">
                                 </div>
+                                <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" name="title" class="form-control" required>
+</div>
+
                                 <div class="mb-4">
                                     <label class="form-label">Short Content *</label>
                                     <textarea name="short_content" class="form-control h_100" cols="30" rows="10">{{ old('short_content') }}</textarea>

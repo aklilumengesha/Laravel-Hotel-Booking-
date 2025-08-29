@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('content');
             $table->integer('total_view');
             $table->timestamps();
+            $table->text('title'); // <-- Add this
+            $table->text('meta_description'); // <-- Add this
         });
     }
 

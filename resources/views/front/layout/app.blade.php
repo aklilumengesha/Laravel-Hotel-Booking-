@@ -5,24 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		
         <meta name="description" content="">
-        <title>Hotel Website</title>        
+        <title>Hotel Booking</title>        
 		
-        <link rel="icon" type="image/png" href="{{ asset('uploads/'.$global_setting_data->favicon) }}">
+        <link rel="icon" type="image/png" href="{{ asset('uploads/'.optional($global_setting_data)->favicon) }}">
 
         @include('front.layout.styles')
 
         @include('front.layout.scripts')        
-        
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500&display=swap" rel="stylesheet">
         
         <!-- Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $global_setting_data->analytic_id }}"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ optional($global_setting_data)->analytic_id }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '{{ $global_setting_data->analytic_id }}');
+            gtag('config', '{{ optional($global_setting_data)->analytic_id }}');
         </script>
 
         <style>
@@ -36,12 +35,12 @@
             .blog-item .inner .text .button a,
             .room-detail-carousel.owl-carousel .owl-nav .owl-prev:hover, 
             .room-detail-carousel.owl-carousel .owl-nav .owl-next:hover {
-                color: {{ $global_setting_data->theme_color_1 }};
+                color: {{ optional($global_setting_data)->theme_color_1 }};
             }
 
             .main-nav nav .navbar-nav .nav-item .dropdown-menu li a:hover,
             .primary-color {
-                color: {{ $global_setting_data->theme_color_1 }}!important;
+                color: {{ optional($global_setting_data)->theme_color_1 }}!important;
             }
 
             .testimonial-carousel .owl-dots .owl-dot,
@@ -49,14 +48,14 @@
             .footer input[type="submit"],
             .scroll-top,
             .room-detail .right .widget .book-now {
-                background-color: {{ $global_setting_data->theme_color_1 }};
+                background-color: {{ optional($global_setting_data)->theme_color_1 }};
             }
 
             .slider .text .button a,
             .search-section button[type="submit"],
             .home-rooms .big-button a,
             .bg-website {
-                background-color: {{ $global_setting_data->theme_color_1 }}!important;
+                background-color: {{ optional($global_setting_data)->theme_color_1 }}!important;
             }
 
             .slider .text .button a,
@@ -66,7 +65,7 @@
             .room-detail-carousel.owl-carousel .owl-nav .owl-prev:hover, 
             .room-detail-carousel.owl-carousel .owl-nav .owl-next:hover,
             .room-detail .amenity .item {
-                border-color: {{ $global_setting_data->theme_color_1 }}!important;
+                border-color: {{ optional($global_setting_data)->theme_color_1 }}!important;
             }
 
             .home-feature .inner .icon i,
@@ -74,8 +73,90 @@
             .blog-item .inner .text .button a,
             .room-detail .amenity .item,
             .cart .table-cart tr th {
-                background-color: {{ $global_setting_data->theme_color_2 }}!important;
+                background-color: {{ optional($global_setting_data)->theme_color_2 }}!important;
             }
+
+
+          /* mystle  */
+      /* Header/Nav background */
+.main-nav {
+    background-color: #6a75ff !important;
+}
+
+/* Nav links */
+.main-nav nav .navbar-nav .nav-item a {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+/* Nav links on hover or active */
+.main-nav nav .navbar-nav .nav-item a:hover,
+.main-nav nav .navbar-nav .nav-item.active a {
+    color: #d1d4ff !important; /* lighter shade for hover */
+}
+
+/* Footer background and text */
+/* .footer {
+    background-color: #6a75ff !important;
+    color: #ffffff !important;
+    padding: 40px 0;
+}
+
+.footer a {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #d1d4ff !important; 
+} */
+
+/* Optional: style footer form inputs/buttons if any */
+/* .footer input[type="submit"],
+.footer button {
+    background-color: #ffffff;
+    color: #6a75ff;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.footer input[type="submit"]:hover,
+.footer button:hover {
+    background-color: #d1d4ff;
+    color: #333333;
+} */
+/* Style buttons in room and post sections */
+.home-rooms .btn,
+.home-rooms a.btn,
+.blog-item .btn,
+.blog-item a.btn {
+    background-color: #6a75ff !important;
+    color: #ffffff !important;
+    border: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.home-rooms .btn:hover,
+.blog-item .btn:hover {
+    background-color: #5c68e0 !important; /* darker hover */
+    color: #ffffff !important;
+}
+.phone-text::before,
+.email-text::before {
+    content: none !important;
+}
+.phone-text i,
+.email-text i {
+    color: #6a75ff; /* White for icons */
+    margin-right: 6px;
+}
+
+
+    /* mystle  */
         </style>
 
     </head>
@@ -87,12 +168,12 @@
                     <div class="col-md-6 left-side">
                         <ul>
 
-                            @if($global_setting_data->top_bar_phone != '')
-                            <li class="phone-text">{{ $global_setting_data->top_bar_phone }}</li>
+                            @if(optional($global_setting_data)->top_bar_phone != '')
+                            <li class="phone-text"><i class="fas fa-phone-alt"></i>{{ optional($global_setting_data)->top_bar_phone }}</li>
                             @endif
                             
-                            @if($global_setting_data->top_bar_email != '')
-                            <li class="email-text">{{ $global_setting_data->top_bar_email }}</li>
+                            @if(optional($global_setting_data)->top_bar_email != '')
+                            <li class="email-text"><i class="fas fa-envelope"></i>{{ optional($global_setting_data)->top_bar_email }}</li>
                             @endif
 
                         </ul>
@@ -100,23 +181,23 @@
                     <div class="col-md-6 right-side">
                         <ul class="right">
 
-                            @if($global_page_data->cart_status == 1)
-                            <li class="menu"><a href="{{ route('cart') }}">{{ $global_page_data->cart_heading }} @if(session()->has('cart_room_id'))<sup>{{ count(session()->get('cart_room_id')) }}</sup>@endif</a></li>
+                            @if(optional($global_page_data)->cart_status == 1)
+                            <li class="menu"><a href="{{ route('cart') }}">{{ optional($global_page_data)->cart_heading }} @if(session()->has('cart_room_id'))<sup>{{ count(session()->get('cart_room_id')) }}</sup>@endif</a></li>
                             @endif
 
-                            @if($global_page_data->checkout_status == 1)
-                            <li class="menu"><a href="{{ route('checkout') }}">{{ $global_page_data->checkout_heading }}</a></li>
+                            @if(optional($global_page_data)->checkout_status == 1)
+                            <li class="menu"><a href="{{ route('checkout') }}">{{ optional($global_page_data)->checkout_heading }}</a></li>
                             @endif
 
 
                             @if(!Auth::guard('customer')->check())
 
-                                @if($global_page_data->signup_status == 1)
-                                <li class="menu"><a href="{{ route('customer_signup') }}">{{ $global_page_data->signup_heading }}</a></li>
+                                @if(optional($global_page_data)->signup_status == 1)
+                                <li class="menu"><a href="{{ route('customer_signup') }}">{{ optional($global_page_data)->signup_heading }}</a></li>
                                 @endif
 
-                                @if($global_page_data->signin_status == 1)
-                                <li class="menu"><a href="{{ route('customer_login') }}">{{ $global_page_data->signin_heading }}</a></li>
+                                @if(optional($global_page_data)->signin_status == 1)
+                                <li class="menu"><a href="{{ route('customer_login') }}">{{ optional($global_page_data)->signin_heading }}</a></li>
                                 @endif
 
                             @else   
@@ -137,7 +218,7 @@
             <!-- Menu For Mobile Device -->
             <div class="mobile-nav">
                 <a href="index.html" class="logo">
-                    <img src="{{ asset('uploads/'.$global_setting_data->logo) }}" alt="">
+                    <img src="{{ asset('uploads/'.optional($global_setting_data)->logo) }}" alt="">
                 </a>
             </div>
         
@@ -146,7 +227,7 @@
                 <div class="container">
                     <nav class="navbar navbar-expand-md navbar-light">
                         <a class="navbar-brand" href="{{ route('home') }}">
-                            <img src="{{ asset('uploads/'.$global_setting_data->logo) }}" alt="">
+                            <img src="{{ asset('uploads/'.optional($global_setting_data)->logo) }}" alt="">
                         </a>
                         <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto">        
@@ -154,16 +235,16 @@
                                     <a href="{{ route('home') }}" class="nav-link">Home</a>
                                 </li>
 
-                                @if($global_page_data->about_status == 1)
+                                @if(optional($global_page_data)->about_status == 1)
                                 <li class="nav-item">
-                                    <a href="{{ route('about') }}" class="nav-link">{{ $global_page_data->about_heading }}</a>
+                                    <a href="{{ route('about') }}" class="nav-link">{{ optional($global_page_data)->about_heading }}</a>
                                 </li>
                                 @endif
 
                                 <li class="nav-item">
-                                    <a href="javascript:void;" class="nav-link dropdown-toggle">Room & Suite</a>
+                                    <!-- <a href="javascript:void;" class="nav-link dropdown-toggle">Room & Suite</a> -->
                                     <ul class="dropdown-menu">
-                                        @foreach($global_room_data as $item)
+                                        @foreach(optional($global_room_data) as $item)
                                         <li class="nav-item">
                                             <a href="{{ route('room_detail',$item->id) }}" class="nav-link">{{ $item->name }}</a>
                                         </li>
@@ -172,20 +253,20 @@
                                 </li>
 
 
-                                @if($global_page_data->photo_gallery_status == 1 || $global_page_data->video_gallery_status == 1)
+                                @if(optional($global_page_data)->photo_gallery_status == 1 || optional($global_page_data)->video_gallery_status == 1)
                                 <li class="nav-item">
-                                    <a href="javascript:void;" class="nav-link dropdown-toggle">Gallery</a>
+                                    <!-- <a href="javascript:void;" class="nav-link dropdown-toggle">Gallery</a> -->
                                     <ul class="dropdown-menu">
 
-                                        @if($global_page_data->photo_gallery_status == 1)
+                                        @if(optional($global_page_data)->photo_gallery_status == 1)
                                         <li class="nav-item">
-                                            <a href="{{ route('photo_gallery') }}" class="nav-link">{{ $global_page_data->photo_gallery_heading }}</a>
+                                            <a href="{{ route('photo_gallery') }}" class="nav-link">{{ optional($global_page_data)->photo_gallery_heading }}</a>
                                         </li>
                                         @endif
                                         
-                                        @if($global_page_data->video_gallery_status == 1)
+                                        @if(optional($global_page_data)->video_gallery_status == 1)
                                         <li class="nav-item">
-                                            <a href="{{ route('video_gallery') }}" class="nav-link">{{ $global_page_data->video_gallery_heading }}</a>
+                                            <a href="{{ route('video_gallery') }}" class="nav-link">{{ optional($global_page_data)->video_gallery_heading }}</a>
                                         </li>
                                         @endif
 
@@ -194,15 +275,15 @@
                                 @endif
 
 
-                                @if($global_page_data->blog_status == 1)
+                                @if(optional($global_page_data)->blog_status == 1)
                                 <li class="nav-item">
-                                    <a href="{{ route('blog') }}" class="nav-link">{{ $global_page_data->blog_heading }}</a>
+                                    <a href="{{ route('blog') }}" class="nav-link">{{ optional($global_page_data)->blog_heading }}</a>
                                 </li>
                                 @endif
 
-                                @if($global_page_data->contact_status == 1)
+                                @if(optional($global_page_data)->contact_status == 1)
                                 <li class="nav-item">
-                                    <a href="{{ route('contact') }}" class="nav-link">{{ $global_page_data->contact_heading }}</a>
+                                    <a href="{{ route('contact') }}" class="nav-link">{{ optional($global_page_data)->contact_heading }}</a>
                                 </li>
                                 @endif
 
@@ -225,20 +306,20 @@
                             <h2 class="heading">Site Links</h2>
                             <ul class="useful-links">
 
-                                @if($global_page_data->photo_gallery_status == 1)
-                                <li><a href="{{ route('photo_gallery') }}">{{ $global_page_data->photo_gallery_heading }}</a></li>
+                                @if(optional($global_page_data)->photo_gallery_status == 1)
+                                <li><a href="{{ route('photo_gallery') }}">{{ optional($global_page_data)->photo_gallery_heading }}</a></li>
                                 @endif
 
-                                @if($global_page_data->video_gallery_status == 1)
-                                <li><a href="{{ route('video_gallery') }}">{{ $global_page_data->video_gallery_heading }}</a></li>
+                                @if(optional($global_page_data)->video_gallery_status == 1)
+                                <li><a href="{{ route('video_gallery') }}">{{ optional($global_page_data)->video_gallery_heading }}</a></li>
                                 @endif
 
-                                @if($global_page_data->blog_status == 1)
-                                <li><a href="{{ route('blog') }}">{{ $global_page_data->blog_heading }}</a></li>
+                                @if(optional($global_page_data)->blog_status == 1)
+                                <li><a href="{{ route('blog') }}">{{ optional($global_page_data)->blog_heading }}</a></li>
                                 @endif
 
-                                @if($global_page_data->contact_status == 1)
-                                <li><a href="{{ route('contact') }}">{{ $global_page_data->contact_heading }}</a></li>
+                                @if(optional($global_page_data)->contact_status == 1)
+                                <li><a href="{{ route('contact') }}">{{ optional($global_page_data)->contact_heading }}</a></li>
                                 @endif
                             </ul>
                         </div>
@@ -249,16 +330,16 @@
                             <ul class="useful-links">
                                 <li><a href="{{ route('home') }}">Home</a></li>
 
-                                @if($global_page_data->terms_status == 1)
-                                <li><a href="{{ route('terms') }}">{{ $global_page_data->terms_heading }}</a></li>
+                                @if(optional($global_page_data)->terms_status == 1)
+                                <li><a href="{{ route('terms') }}">{{ optional($global_page_data)->terms_heading }}</a></li>
                                 @endif
                                 
-                                @if($global_page_data->privacy_status == 1)
-                                <li><a href="{{ route('privacy') }}">{{ $global_page_data->privacy_heading }}</a></li>
+                                @if(optional($global_page_data)->privacy_status == 1)
+                                <li><a href="{{ route('privacy') }}">{{ optional($global_page_data)->privacy_heading }}</a></li>
                                 @endif
 
-                                @if($global_page_data->faq_status == 1)
-                                <li><a href="{{ route('faq') }}">{{ $global_page_data->faq_heading }}</a></li>
+                                @if(optional($global_page_data)->faq_status == 1)
+                                <li><a href="{{ route('faq') }}">{{ optional($global_page_data)->faq_heading }}</a></li>
                                 @endif
                             </ul>
                         </div>
@@ -273,7 +354,7 @@
                                     <i class="fa fa-map-marker"></i>
                                 </div>
                                 <div class="right">
-                                    {!! nl2br($global_setting_data->footer_address) !!}
+                                    {!! nl2br(optional($global_setting_data)->footer_address) !!}
                                 </div>
                             </div>
                             <div class="list-item">
@@ -281,7 +362,7 @@
                                     <i class="fa fa-volume-control-phone"></i>
                                 </div>
                                 <div class="right">
-                                    {{ $global_setting_data->footer_phone }}
+                                    {{ optional($global_setting_data)->footer_phone }}
                                 </div>
                             </div>
                             <div class="list-item">
@@ -289,25 +370,25 @@
                                     <i class="fa fa-envelope-o"></i>
                                 </div>
                                 <div class="right">
-                                    {{ $global_setting_data->footer_email }}
+                                    {{ optional($global_setting_data)->footer_email }}
                                 </div>
                             </div>
                             <ul class="social">
 
-                                @if($global_setting_data->facebook != '')
-                                <li><a href="{{ $global_setting_data->facebook }}"><i class="fa fa-facebook-f"></i></a></li>
+                                @if(optional($global_setting_data)->facebook != '')
+                                <li><a href="{{ optional($global_setting_data)->facebook }}"><i class="fa fa-facebook-f"></i></a></li>
                                 @endif
 
-                                @if($global_setting_data->twitter != '')
-                                <li><a href="{{ $global_setting_data->twitter }}"><i class="fa fa-twitter"></i></a></li>
+                                @if(optional($global_setting_data)->twitter != '')
+                                <li><a href="{{ optional($global_setting_data)->twitter }}"><i class="fa fa-twitter"></i></a></li>
                                 @endif
 
-                                @if($global_setting_data->linkedin != '')
-                                <li><a href="{{ $global_setting_data->linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                @if(optional($global_setting_data)->linkedin != '')
+                                <li><a href="{{ optional($global_setting_data)->linkedin }}"><i class="fa fa-linkedin"></i></a></li>
                                 @endif
 
-                                @if($global_setting_data->pinterest != '')
-                                <li><a href="{{ $global_setting_data->pinterest }}"><i class="fa fa-pinterest-p"></i></a></li>
+                                @if(optional($global_setting_data)->pinterest != '')
+                                <li><a href="{{ optional($global_setting_data)->pinterest }}"><i class="fa fa-pinterest-p"></i></a></li>
                                 @endif
                                 
                             </ul>
@@ -408,6 +489,6 @@
             })(jQuery);
         </script>
         <div id="loader"></div>
-		
+    @stack('scripts')
    </body>
 </html>

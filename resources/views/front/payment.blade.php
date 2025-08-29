@@ -68,17 +68,19 @@
                         
                 <h4>Make Payment</h4>
                 <select name="payment_method" class="form-control select2" id="paymentMethodChange" autocomplete="off">
-                    <option value="">Select Payment Method</option>
-                    <option value="PayPal">PayPal</option>
-                    <option value="Stripe">Stripe</option>
-                </select>
+    <option value="">Select Payment Method</option>
+    <option value="Chapa">Chapa</option>
+    <option value="PayPal">PayPal</option>
+    <option value="Stripe">Stripe</option>
+    
+</select>
 
-                <div class="paypal mt_20">
+                <div class="paypal mt_20" style="display: none;">
                     <h4>Pay with PayPal</h4>
                     <div id="paypal-button"></div>
                 </div>
 
-                <div class="stripe mt_20">
+                <div class="stripe mt_20" style="display: none;">
                     <h4>Pay with Stripe</h4>
                     @php
                     $cents = $total_price*100;
@@ -100,6 +102,24 @@
                         </script>
                     </form>
                 </div>
+
+                <div class="chapa mt_20" style="display: none;">
+    <h4>Pay with Chapa</h4>
+
+    {{-- The action must point to the route named 'payment' --}}
+    <form method="POST" action="{{ route('payment.chapa') }}">
+        @csrf
+        <input type="hidden" name="room_id" value="{{ $arr_cart_room_id[0] }}">
+        <input type="hidden" name="amount" value="{{ $total_price }}">
+        <input type="hidden" name="first_name" value="{{ session()->get('billing_name') }}">
+        <input type="hidden" name="last_name" value="">
+        <input type="hidden" name="email" value="{{ session()->get('billing_email') }}">
+
+        <button type="submit" class="btn btn-primary btn-block">Pay Now via Chapa</button>
+    </form>
+</div>
+
+
 
             </div>
             <div class="col-lg-4 col-md-4 checkout-right">
@@ -253,4 +273,38 @@ $client = 'ARw2VtkTvo3aT7DILgPWeSUPjMK_AS5RlMKkUmB78O8rFCJcfX6jFSmTDpgdV3bOFLG2W
 		}
 	}, '#paypal-button');
 </script>
+
+@push('scripts')
+{{-- Make sure jQuery is loaded before this script in your main layout file --}}
+<script>
+    // Use jQuery's document ready function
+    $(document).ready(function() {
+
+        // The '.on('change', ...)' is the proper way to listen for changes on a Select2 element
+        $('#paymentMethodChange').on('change', function() {
+            
+            // Get the value of the selected option
+            var selectedMethod = $(this).val();
+
+            // Hide all payment boxes first
+            $('.paypal').hide();
+            $('.stripe').hide();
+            $('.chapa').hide();
+
+            // Show the correct box based on the selection
+            if (selectedMethod === 'PayPal') {
+                $('.paypal').show();
+            } else if (selectedMethod === 'Stripe') {
+                $('.stripe').show();
+            } else if (selectedMethod === 'Chapa') {
+                $('.chapa').show();
+            }
+        });
+
+        // Optional: Trigger the change on page load to set the correct initial state
+        $('#paymentMethodChange').trigger('change');
+    });
+</script>
+@endpush
+
 @endsection

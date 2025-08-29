@@ -1,0 +1,23 @@
+# Laravel specific
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+.env
+.phpunit.result.cache
+
+# Laravel Homestead
+Homestead.yaml
+Homestead.json
+
+# IDEs & Editors
+/.idea
+/.vscode
+
+# NPM / Yarn logs
+npm-debug.log
+yarn-error.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -27,6 +27,8 @@ return new class extends Migration
             $table->text('total_guests')->nullable();
             $table->text('featured_photo');
             $table->text('video_id')->nullable();
+            $table->string('bed')->nullable(); // <-- Add this
+            $table->string('bath')->nullable(); // <-- Add this
             $table->timestamps();
         });
     }

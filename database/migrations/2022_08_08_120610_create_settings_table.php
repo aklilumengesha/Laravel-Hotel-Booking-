@@ -38,6 +38,9 @@ return new class extends Migration
             $table->text('analytic_id')->nullable();
             $table->timestamps();
         });
+        Schema::table('settings', function (Blueprint $table) {
+            $table->text('footer_about')->nullable()->after('footer_email');
+        });
     }
 
     /**
@@ -48,5 +51,8 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('settings');
+        Schema::table('settings', function (Blueprint $table) {
+            $table->dropColumn('footer_about');
+        });
     }
 };

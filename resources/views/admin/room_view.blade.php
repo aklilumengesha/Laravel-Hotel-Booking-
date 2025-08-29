@@ -81,12 +81,17 @@
                                                     <div class="col-md-4"><label class="form-label">Total Amenities</label></div>
                                                     <div class="col-md-8">
                                                         @php
-                                                        $arr = explode(',',$row->amenities);
-                                                        for($j=0;$j<count($arr);$j++) {
-                                                            $temp_row = \App\Models\Amenity::where('id',$arr[$j])->first();
-                                                            echo $temp_row->name.'<br>';
-                                                        }
-                                                        @endphp
+$arr = explode(',', $row->amenities);
+for ($j = 0; $j < count($arr); $j++) {
+    $temp_row = \App\Models\Amenity::find($arr[$j]);
+    if ($temp_row) {
+        echo e($temp_row->name) . '<br>';
+    } else {
+        echo '<span class="text-danger">Missing Amenity (ID: ' . e($arr[$j]) . ')</span><br>';
+    }
+}
+@endphp
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group row bdb1 pt_10 mb_0">

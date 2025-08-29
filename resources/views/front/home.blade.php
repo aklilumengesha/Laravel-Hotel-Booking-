@@ -1,5 +1,7 @@
 @extends('front.layout.app')
 
+@php use Illuminate\Support\Str; @endphp
+
 @section('main_content')
 <div class="slider">
     <div class="slide-carousel owl-carousel">
@@ -65,25 +67,23 @@
 
 
 
-@if($global_setting_data->home_feature_status == 'Show')
-<div class="home-feature">
+@if(optional($global_setting_data)->home_feature_status == 'Show')
+<div class="home-feature py-5">
     <div class="container">
         <div class="row">
-            
-            @foreach($feature_all as $item)
-            <div class="col-md-3">
-                <div class="inner">
-                    <div class="icon"><i class="{{ $item->icon }}"></i></div>
+            @foreach($feature_all->unique('heading')->take(8) as $item)
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="inner text-center p-3 border rounded h-100">
+                    <div class="icon mb-3" style="font-size: 40px; color: #28a745;">
+                        <i class="{{ $item->icon }}"></i>
+                    </div>
                     <div class="text">
-                        <h2>{{ $item->heading }}</h2>
-                        <p>
-                            {!! $item->text !!}
-                        </p>
+                        <h5 class="fw-bold">{{ $item->heading }}</h5>
+                        <p class="mb-0">{!! $item->text !!}</p>
                     </div>
                 </div>
             </div>
             @endforeach
-
         </div>
     </div>
 </div>
@@ -91,7 +91,8 @@
 
 
 
-@if($global_setting_data->home_room_status == 'Show')
+
+@if(optional($global_setting_data)->home_room_status == 'Show')
 <div class="home-rooms">
     <div class="container">
         <div class="row">
@@ -114,6 +115,27 @@
                         <div class="price">
                             ${{ $item->price }}/night
                         </div>
+                        @php
+    $avgRating = round($item->averageRating(), 1);
+    $ratingCount = $item->ratingCount();
+@endphp
+
+@if($ratingCount > 0)
+    <div class="rating text-warning mb-2">
+        @for ($i = 1; $i <= 5; $i++)
+            @if ($i <= floor($avgRating))
+                &#9733; {{-- filled star --}}
+            @elseif ($i - $avgRating < 1)
+                &#9734; {{-- half star or empty star --}}
+            @else
+                &#9734; {{-- empty star --}}
+            @endif
+        @endfor
+        <span class="text-dark">{{ $avgRating }} / 5</span>
+        <small>({{ $ratingCount }} {{ Str::plural('rating', $ratingCount) }})</small>
+    </div>
+@endif
+
                         <div class="button">
                             <a href="{{ route('room_detail',$item->id) }}" class="btn btn-primary">See Detail</a>
                         </div>
@@ -134,7 +156,7 @@
 @endif
 
 
-@if($global_setting_data->home_testimonial_status == 'Show')
+@if(optional($global_setting_data)->home_testimonial_status == 'Show')
 <div class="testimonial" style="background-image: url(uploads/slide2.jpg)">
     <div class="bg"></div>
     <div class="container">
@@ -170,7 +192,7 @@
 @endif
 
 
-@if($global_setting_data->home_latest_post_status == 'Show')
+@if(optional($global_setting_data)->home_latest_post_status == 'Show')
 <div class="blog-item">
     <div class="container">
         <div class="row">
