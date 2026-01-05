@@ -3,7 +3,7 @@
 @section('heading', 'View Videos')
 
 @section('right_top_button')
-<a href="{{ route('admin_video_add') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
+<a href="{{ route('admin.video.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
 @endsection
 
 @section('main_content')
@@ -33,9 +33,18 @@
                                     </td>
                                     <td>{{ $row->caption }}</td>
                                     <td class="pt_10 pb_10">
-                                        <a href="{{ route('admin_video_edit',$row->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('admin_video_delete',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
-                                    </td>
+    {{-- Corrected Edit Link --}}
+    <a href="{{ route('admin.video.edit', $row->id) }}" class="btn btn-primary">Edit</a>
+
+    {{-- Corrected and Secure Delete Button --}}
+    <form action="{{ route('admin.video.destroy', $row->id) }}" method="POST" style="display:inline-block;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+            Delete
+        </button>
+    </form>
+</td>
                                 </tr>
                                 @endforeach
                             </tbody>

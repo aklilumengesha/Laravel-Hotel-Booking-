@@ -3,7 +3,7 @@
 @section('heading', 'View Slides')
 
 @section('right_top_button')
-<a href="{{ route('admin_slide_add') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
+<a href="{{ route('admin.slide.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
 @endsection
 
 @section('main_content')
@@ -29,9 +29,18 @@
                                         <img src="{{ asset('uploads/'.$row->photo) }}" alt="" class="w_200">
                                     </td>
                                     <td class="pt_10 pb_10">
-                                        <a href="{{ route('admin_slide_edit',$row->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('admin_slide_delete',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
-                                    </td>
+    {{-- Corrected Edit Link --}}
+    <a href="{{ route('admin.slide.edit', $row->id) }}" class="btn btn-primary">Edit</a>
+
+    {{-- Corrected and Secure Delete Button --}}
+    <form action="{{ route('admin.slide.destroy', $row->id) }}" method="POST" style="display:inline-block;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+            Delete
+        </button>
+    </form>
+</td>
                                 </tr>
                                 @endforeach
                             </tbody>

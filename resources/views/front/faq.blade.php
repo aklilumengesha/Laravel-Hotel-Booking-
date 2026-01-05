@@ -32,7 +32,7 @@
                         </h2>
                         <div id="collapse{{ $i }}" class="accordion-collapse collapse @if($i==1) show @endif" aria-labelledby="heading{{ $i }}" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                {!! $item->answer !!}
+                                {!! html_entity_decode($item->answer) !!}
                             </div>
                         </div>
                     </div>

@@ -61,9 +61,9 @@ class AdminLoginController extends Controller
         ];
 
         if(Auth::guard('admin')->attempt($credential)) {
-            return redirect()->route('admin_home');
+            return redirect()->route('admin.home');
         } else {
-            return redirect()->route('admin_login')->with('error', 'Information is not correct!');
+            return redirect()->route('admin.login')->with('error', 'Information is not correct!');
         }
     }
 

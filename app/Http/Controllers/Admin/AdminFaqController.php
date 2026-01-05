@@ -19,6 +19,11 @@ class AdminFaqController extends Controller
         return view('admin.faq_add');
     }
 
+    public function create()
+    {
+        return view('admin.faq_add');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -53,6 +58,14 @@ class AdminFaqController extends Controller
     }
 
     public function delete($id)
+    {
+        $single_data = Faq::where('id',$id)->first();
+        $single_data->delete();
+
+        return redirect()->back()->with('success', 'FAQ is deleted successfully.');
+    }
+
+    public function destroy($id)
     {
         $single_data = Faq::where('id',$id)->first();
         $single_data->delete();

@@ -1,6 +1,6 @@
 @extends('admin.layout.app')
 
-@section('content')
+@section('main_content')
  <div class="container py-5">
 
     <h2 class="mb-4">Edit About Section</h2>

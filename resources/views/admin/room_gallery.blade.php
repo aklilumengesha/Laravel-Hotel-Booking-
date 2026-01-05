@@ -3,7 +3,7 @@
 @section('heading', 'Room Gallery of '.$room_data->name)
 
 @section('right_top_button')
-<a href="{{ route('admin_room_view') }}" class="btn btn-primary"><i class="fa fa-eye"></i> Back to previous</a>
+<a href="{{ route('admin.room.index') }}" class="btn btn-primary"><i class="fa fa-eye"></i> Back to previous</a>
 @endsection
 
 @section('main_content')
@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_room_gallery_store',$room_data->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.room.gallery.store',$room_data->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

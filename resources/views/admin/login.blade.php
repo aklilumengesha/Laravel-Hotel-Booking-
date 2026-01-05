@@ -17,7 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-4">
 
-                <form action="{{ route('admin_login_submit') }}" method="POST">
+                <form action="{{ route('admin.login_submit') }}" method="POST">
                     @csrf
                     <div class="login-form">
                         <div class="mb-3">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary bg-website">Login</button>
-                            <a href="{{ route('admin_forget_password') }}" class="primary-color">Forget Password?</a>
+                            <a href="{{ route('admin.forget_password') }}" class="primary-color">Forget Password?</a>
                         </div>
                     </div>
                 </form>

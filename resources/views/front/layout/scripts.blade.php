@@ -14,3 +14,7 @@
 <script src="{{ asset('dist-front/js/sticky_sidebar.js') }}"></script>
 <script src="{{ asset('dist-front/js/jquery.meanmenu.js') }}"></script>
 <script src="{{ asset('dist-front/js/iziToast.min.js') }}"></script>
+
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

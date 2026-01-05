@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use Illuminate\Support\Facades\File;
 
 class AdminSettingController extends Controller
 {
@@ -21,7 +22,10 @@ class AdminSettingController extends Controller
             $request->validate([
                 'logo' => 'image|mimes:jpg,jpeg,png,gif'
             ]);
-            unlink(public_path('uploads/'.$obj->logo));
+            // unlink(public_path('uploads/'.$obj->logo));
+                if ($obj->logo && File::exists(public_path('uploads/'.$obj->logo))) {
+        unlink(public_path('uploads/'.$obj->logo));
+    }
             $ext = $request->file('logo')->extension();
             $final_name = time().'.'.$ext;
             $request->file('logo')->move(public_path('uploads/'),$final_name);
@@ -31,7 +35,9 @@ class AdminSettingController extends Controller
             $request->validate([
                 'favicon' => 'image|mimes:jpg,jpeg,png,gif'
             ]);
-            unlink(public_path('uploads/'.$obj->favicon));
+                if ($obj->favicon && File::exists(public_path('uploads/'.$obj->favicon))) {
+        unlink(public_path('uploads/'.$obj->favicon));
+    }
             $ext = $request->file('favicon')->extension();
             $final_name = time().'.'.$ext;
             $request->file('favicon')->move(public_path('uploads/'),$final_name);

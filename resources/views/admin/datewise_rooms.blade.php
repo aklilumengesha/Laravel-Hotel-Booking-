@@ -8,7 +8,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_datewise_rooms_submit') }}" method="post">
+                    <form action="{{ route('admin.datewise_rooms.submit') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

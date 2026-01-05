@@ -6,11 +6,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "doctrine/dbal": "^3.6",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.6",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.12",
         "paypal/rest-api-sdk-php": "^1.14",
         "stripe/stripe-php": "^9.0",
         "symfony/http-client": "^6.2",

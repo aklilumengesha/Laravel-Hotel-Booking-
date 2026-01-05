@@ -3,7 +3,7 @@
 @section('heading', 'Add Post')
 
 @section('right_top_button')
-<a href="{{ route('admin_post_view') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
+<a href="{{ route('admin.post.index') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
 @endsection
 
 @section('main_content')
@@ -12,14 +12,39 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_post_store') }}" method="post" enctype="multipart/form-data">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    <form action="{{ route('admin.post.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="mb-4">
-                                    <label class="form-label">Photo *</label>
+                                    <label class="form-label">Photo * (Max: 10MB)</label>
                                     <div>
-                                        <input type="file" name="photo">
+                                        <input type="file" name="photo" accept="image/jpeg,image/png,image/jpg,image/gif">
                                     </div>
                                 </div>
                                 <div class="mb-4">

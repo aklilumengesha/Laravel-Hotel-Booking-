@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_page_payment_update') }}" method="post">
+                    <form action="{{ route('admin.page.payment.update') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

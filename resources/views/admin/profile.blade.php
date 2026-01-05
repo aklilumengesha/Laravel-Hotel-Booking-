@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_profile_submit') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.profile.update') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-3">

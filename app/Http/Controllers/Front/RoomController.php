@@ -8,16 +8,21 @@ use App\Models\Room;
 
 class RoomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        
-        $room_all = Room::with('reviews')->paginate(12);
-        return view('front.room', compact('room_all'));
+        // Livewire component handles all filtering/sorting
+        // This just renders the page
+        return view('front.room');
     }
 
     public function single_room($id)
     {
-        $single_room_data = Room::with('rRoomPhoto')->where('id',$id)->first();
+        $single_room_data = Room::with('rRoomPhoto', 'reviews.customer')->where('id',$id)->first();
+        
+        if (!$single_room_data) {
+            abort(404);
+        }
+        
         return view('front.room_detail', compact('single_room_data'));
     }
 }

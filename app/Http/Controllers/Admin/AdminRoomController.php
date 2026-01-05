@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Amenity;
 use App\Models\Room;
 use App\Models\RoomPhoto;
+use Illuminate\Support\Facades\File;
+use App\Models\Payment;
+
 
 class AdminRoomController extends Controller
 {
@@ -16,12 +19,16 @@ class AdminRoomController extends Controller
         return view('admin.room_view', compact('rooms'));
     }
 
-    public function add()
+    public function create()
     {
         $all_amenities = Amenity::get();
         return view('admin.room_add',compact('all_amenities'));
     }
-
+    // Add this entire new method to AdminRoomController.php
+public function show($id)
+{
+    return redirect()->route('admin.room.edit', $id);
+}
     public function store(Request $request)
     {
         $amenities = '';
@@ -61,13 +68,23 @@ class AdminRoomController extends Controller
         $obj->total_bathrooms = $request->total_bathrooms;
         $obj->total_balconies = $request->total_balconies;
         $obj->total_guests = $request->total_guests;
-        $obj->video_id = $request->video_id;
+               $video_id = '';
+        if($request->video_id) {
+            $url = $request->video_id;
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
+                $video_id = $match[1];
+            } else {
+                $video_id = $url; // Assume it's already an ID if no match
+            }
+        }
+        $obj->video_id = $video_id;
+        // $obj->video_id = $request->video_id;
         $obj->bed = $request->bed;
         $obj->bath = $request->bath;
 
         $obj->save();
 
-        return redirect()->back()->with('success', 'Room is added successfully.');
+        return redirect()->route('admin.room.index')->with('success', 'Room is added successfully.');
 
     }
 
@@ -105,15 +122,17 @@ class AdminRoomController extends Controller
             'description' => 'required',
             'price' => 'required',
             'total_rooms' => 'required',
-            'bed' => 'required|numeric',
-            'bath' => 'required|numeric',
+            'total_beds' => 'required|numeric',
+            'total_bathrooms' => 'required|numeric',
         ]);
 
         if($request->hasFile('featured_photo')) {
             $request->validate([
                 'featured_photo' => 'image|mimes:jpg,jpeg,png,gif'
             ]);
-            unlink(public_path('uploads/'.$obj->featured_photo));
+                if ($obj->featured_photo && File::exists(public_path('uploads/'.$obj->featured_photo))) {
+        File::delete(public_path('uploads/'.$obj->featured_photo));
+    }
             $ext = $request->file('featured_photo')->extension();
             $final_name = time().'.'.$ext;
             $request->file('featured_photo')->move(public_path('uploads/'),$final_name);
@@ -130,26 +149,53 @@ class AdminRoomController extends Controller
         $obj->total_bathrooms = $request->total_bathrooms;
         $obj->total_balconies = $request->total_balconies;
         $obj->total_guests = $request->total_guests;
-        $obj->video_id = $request->video_id;
+                $video_id = '';
+        if($request->video_id) {
+            $url = $request->video_id;
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
+                $video_id = $match[1];
+            } else {
+                $video_id = $url; // Assume it's already an ID if no match
+            }
+        }
+        $obj->video_id = $video_id;
+        // $obj->video_id = $request->video_id;
         $obj->update();
 
-        return redirect()->back()->with('success', 'Room is updated successfully.');
+        return redirect()->route('admin.room.index')->with('success', 'Room is updated successfully.');
     }
 
-    public function delete($id)
-    {
-        $single_data = Room::where('id',$id)->first();
-        unlink(public_path('uploads/'.$single_data->featured_photo));
-        $single_data->delete();
+   public function destroy($id)
+{
+    // Find the room data
+    $single_data = Room::where('id', $id)->first();
 
-        $room_photo_data = RoomPhoto::where('room_id',$id)->get();
-        foreach($room_photo_data as $item) {
-            unlink(public_path('uploads/'.$item->photo));
-            $item->delete();
+    // Define the path to the featured photo
+    $path = public_path('uploads/' . $single_data->featured_photo);
+
+    // Check if the featured photo exists, then delete it
+    if (File::exists($path)) {
+        File::delete($path);
+    }
+
+    // Find and delete all associated gallery photos
+    $room_photo_data = RoomPhoto::where('room_id', $id)->get();
+    foreach ($room_photo_data as $item) {
+        $photo_path = public_path('uploads/' . $item->photo);
+        if (File::exists($photo_path)) {
+            File::delete($photo_path);
         }
-
-        return redirect()->back()->with('success', 'Room is deleted successfully.');
+        $item->delete();
     }
+
+    // NEW: Find and delete all associated payments
+    \App\Models\Payment::where('room_id', $id)->delete();
+
+    // FINALLY: Delete the database record for the room
+    $single_data->delete();
+
+    return redirect()->route('admin.room.index')->with('success', 'Room is deleted successfully.');
+}
 
     public function gallery($id)
     {

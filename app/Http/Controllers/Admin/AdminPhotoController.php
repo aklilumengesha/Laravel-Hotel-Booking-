@@ -38,6 +38,13 @@ class AdminPhotoController extends Controller
 
     }
 
+    
+    // Add these two new methods
+
+public function create()
+{
+    return view('admin.photo_add');
+}
 
     public function edit($id)
     {

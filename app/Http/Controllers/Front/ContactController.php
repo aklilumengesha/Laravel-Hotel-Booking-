@@ -13,7 +13,8 @@ class ContactController extends Controller
     public function index()
     {
         $page_data = Page::where('id',1)->first();
-        return view('front.contact', compact('page_data'));
+        $faqs = \App\Models\Faq::orderBy('id', 'asc')->get();
+        return view('front.contact', compact('page_data', 'faqs'));
     }
 
     public function send_email(Request $request)

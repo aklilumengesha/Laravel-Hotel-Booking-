@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimonial;
+use Illuminate\Support\Facades\File;
 
 class AdminTestimonialController extends Controller
 {
@@ -14,7 +15,7 @@ class AdminTestimonialController extends Controller
         return view('admin.testimonial_view', compact('testimonials'));
     }
 
-    public function add()
+    public function create()
     {
         return view('admin.testimonial_add');
     }
@@ -57,12 +58,26 @@ class AdminTestimonialController extends Controller
             $request->validate([
                 'photo' => 'image|mimes:jpg,jpeg,png,gif'
             ]);
-            unlink(public_path('uploads/'.$obj->photo));
+
+            if($obj->photo && File::exists(public_path('uploads/'.$obj->photo))) {
+                File::delete(public_path('uploads/'.$obj->photo));
+            }
+
             $ext = $request->file('photo')->extension();
             $final_name = time().'.'.$ext;
             $request->file('photo')->move(public_path('uploads/'),$final_name);
             $obj->photo = $final_name;
         }
+        // if($request->hasFile('photo')) {
+        //     $request->validate([
+        //         'photo' => 'image|mimes:jpg,jpeg,png,gif'
+        //     ]);
+        //     unlink(public_path('uploads/'.$obj->photo));
+        //     $ext = $request->file('photo')->extension();
+        //     $final_name = time().'.'.$ext;
+        //     $request->file('photo')->move(public_path('uploads/'),$final_name);
+        //     $obj->photo = $final_name;
+        // }
 
         $obj->name = $request->name;
         $obj->designation = $request->designation;
@@ -72,12 +87,16 @@ class AdminTestimonialController extends Controller
         return redirect()->back()->with('success', 'Testimonial is updated successfully.');
     }
 
-    public function delete($id)
+       public function destroy($id)
     {
         $single_data = Testimonial::where('id',$id)->first();
-        unlink(public_path('uploads/'.$single_data->photo));
+        
+        if($single_data->photo && File::exists(public_path('uploads/'.$single_data->photo))) {
+            File::delete(public_path('uploads/'.$single_data->photo));
+        }
+        
         $single_data->delete();
 
-        return redirect()->back()->with('success', 'Testimonial is deleted successfully.');
+        return redirect()->route('admin.testimonial.index')->with('success', 'Testimonial is deleted successfully.');
     }
 }

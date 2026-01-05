@@ -3,7 +3,8 @@
 @section('heading', 'View Rooms')
 
 @section('right_top_button')
-<a href="{{ route('admin_room_add') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
+<a href="{{ route('admin.room.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>  
+<!-- i changed the admin.room.add to admin.room.create -->
 @endsection
 
 @section('main_content')
@@ -38,10 +39,20 @@
                                         
                                         <button class="btn btn-warning" data-toggle="modal" data-target="#exampleModal{{ $i }}">Detail</button>
 
-                                        <a href="{{ route('admin_room_gallery',$row->id) }}" class="btn btn-success">Gallery</a>
+                                        <a href="{{ route('admin.room.gallery',$row->id) }}" class="btn btn-success">Gallery</a>
 
-                                        <a href="{{ route('admin_room_edit',$row->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('admin_room_delete',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
+                                        <a href="{{ route('admin.room.edit',$row->id) }}" class="btn btn-primary">Edit</a>
+                                        <!-- <a href="{{ route('admin.room.destroy',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
+                                         -->
+                                        <form action="{{ route('admin.room.destroy', $row->id) }}" method="POST" style="display:inline-block;">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this room?');">
+        Delete
+    </button>
+</form>
+
+                                        <!-- i changed .delete to .destroy -->
                                     </td>
                                 </tr>
 

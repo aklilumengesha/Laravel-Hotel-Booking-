@@ -3,7 +3,7 @@
 @section('heading', 'View Amenities')
 
 @section('right_top_button')
-<a href="{{ route('admin_amenity_add') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
+<a href="{{ route('admin.amenity.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
 @endsection
 
 @section('main_content')
@@ -29,8 +29,8 @@
                                         {{ $row->name }}
                                     </td>
                                     <td class="pt_10 pb_10">
-                                        <a href="{{ route('admin_amenity_edit',$row->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('admin_amenity_delete',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
+                                        <a href="{{ route('admin.amenity.edit',$row->id) }}" class="btn btn-primary">Edit</a>
+                                        <a href="{{ route('admin.amenity.destroy',$row->id) }}" class="btn btn-danger" onClick="return confirm('Are you sure?');">Delete</a>
                                     </td>
                                 </tr>
                                 @endforeach

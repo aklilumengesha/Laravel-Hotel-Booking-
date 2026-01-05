@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Slide;
+use Illuminate\Support\Facades\File;
 
 class AdminSlideController extends Controller
 {
@@ -14,7 +15,7 @@ class AdminSlideController extends Controller
         return view('admin.slide_view', compact('slides'));
     }
 
-    public function add()
+    public function create()
     {
         return view('admin.slide_add');
     }
@@ -54,7 +55,9 @@ class AdminSlideController extends Controller
             $request->validate([
                 'photo' => 'image|mimes:jpg,jpeg,png,gif'
             ]);
-            unlink(public_path('uploads/'.$obj->photo));
+                    if ($obj->photo && File::exists(public_path('uploads/'.$obj->photo))) {
+            File::delete(public_path('uploads/'.$obj->photo));
+        }
             $ext = $request->file('photo')->extension();
             $final_name = time().'.'.$ext;
             $request->file('photo')->move(public_path('uploads/'),$final_name);
@@ -69,13 +72,19 @@ class AdminSlideController extends Controller
 
         return redirect()->back()->with('success', 'Slide is updated successfully.');
     }
-
-    public function delete($id)
+       public function destroy($id)
     {
-        $single_data = Slide::where('id',$id)->first();
-        unlink(public_path('uploads/'.$single_data->photo));
-        $single_data->delete();
+        $slide_data = Slide::where('id', $id)->first();
 
-        return redirect()->back()->with('success', 'Slide is deleted successfully.');
+        // Safely delete the photo file if it exists
+        if (File::exists(public_path('uploads/' . $slide_data->photo))) {
+            File::delete(public_path('uploads/' . $slide_data->photo));
+        }
+
+        // Delete the record from the database
+        $slide_data->delete();
+
+        return redirect()->route('admin.slide.index')->with('success', 'Slide is deleted successfully.');
     }
+
 }

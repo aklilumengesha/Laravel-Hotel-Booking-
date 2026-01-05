@@ -33,7 +33,10 @@ class BookingController extends Controller
         $dates = explode(' - ',$request->checkin_checkout);
         $checkin_date = $dates[0];
         $checkout_date = $dates[1];
-
+        // This check prevents booking a 0-night stay.
+        if($checkin_date == $checkout_date) {
+            return redirect()->back()->with('error', 'Check-out date must be at least one day after the check-in date.');
+        }
         $d1 = explode('/',$checkin_date);
         $d2 = explode('/',$checkout_date);
         $d1_new = $d1[2].'-'.$d1[1].'-'.$d1[0];

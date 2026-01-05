@@ -3,7 +3,7 @@
 @section('heading', 'Edit Feature')
 
 @section('right_top_button')
-<a href="{{ route('admin_feature_view') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
+<a href="{{ route('admin.feature.index') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
 @endsection
 
 @section('main_content')
@@ -12,8 +12,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_feature_update',$feature_data->id) }}" method="post">
+                    <form action="{{ route('admin.feature.update',$feature_data->id) }}" method="post">
                         @csrf
+                        @method('PUT')
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-4">

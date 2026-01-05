@@ -15,6 +15,11 @@ class AdminPostController extends Controller
         return view('admin.post_view', compact('posts'));
     }
 
+    public function create()
+    {
+        return view('admin.post_add');
+    }
+
     public function add()
     {
         return view('admin.post_add');
@@ -22,37 +27,49 @@ class AdminPostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'photo' => 'required|image|mimes:jpg,jpeg,png,gif',
-            'heading' => 'required',
-            'short_content' => 'required',
-            'content' => 'required'
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required',
+                'photo' => 'required|image|mimes:jpg,jpeg,png,gif|max:10240', // Max 10MB
+                'heading' => 'required',
+                'short_content' => 'required',
+                'content' => 'required'
+            ]);
 
-        $ext = $request->file('photo')->extension();
-        $final_name = time().'.'.$ext;
-        $request->file('photo')->move(public_path('uploads/'), $final_name);
+            if (!$request->hasFile('photo')) {
+                return redirect()->back()->with('error', 'No photo file uploaded.')->withInput();
+            }
 
-        // Generate slug from heading
-        $slug = Str::slug($request->heading);
-        // Ensure slug is unique
-        $existing = Post::where('slug', $slug)->count();
-        if ($existing > 0) {
-            $slug .= '-' . time();
+            if (!$request->file('photo')->isValid()) {
+                return redirect()->back()->with('error', 'Photo upload failed. Please try again.')->withInput();
+            }
+
+            $ext = $request->file('photo')->extension();
+            $final_name = time().'.'.$ext;
+            $request->file('photo')->move(public_path('uploads/'), $final_name);
+
+            // Generate slug from heading
+            $slug = Str::slug($request->heading);
+            // Ensure slug is unique
+            $existing = Post::where('slug', $slug)->count();
+            if ($existing > 0) {
+                $slug .= '-' . time();
+            }
+
+            $obj = new Post();
+            $obj->photo = $final_name;
+            $obj->title = $request->title;
+            $obj->heading = $request->heading;
+            $obj->slug = $slug;
+            $obj->short_content = $request->short_content;
+            $obj->content = $request->content;
+            $obj->total_view = 1;
+            $obj->save();
+
+            return redirect()->back()->with('success', 'Post is added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage())->withInput();
         }
-
-        $obj = new Post();
-        $obj->photo = $final_name;
-        $obj->title = $request->title;
-        $obj->heading = $request->heading;
-        $obj->slug = $slug;
-        $obj->short_content = $request->short_content;
-        $obj->content = $request->content;
-        $obj->total_view = 1;
-        $obj->save();
-
-        return redirect()->back()->with('success', 'Post is added successfully.');
     }
 
     public function edit($id)
@@ -67,7 +84,7 @@ class AdminPostController extends Controller
 
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'image|mimes:jpg,jpeg,png,gif'
+                'photo' => 'image|mimes:jpg,jpeg,png,gif|max:10240' // Max 10MB
             ]);
 
             if (file_exists(public_path('uploads/' . $obj->photo))) {
@@ -103,7 +120,32 @@ class AdminPostController extends Controller
     {
         $single_data = Post::where('id', $id)->first();
 
-        if (file_exists(public_path('uploads/' . $single_data->photo))) {
+        // Check if post exists
+        if (!$single_data) {
+            return redirect()->back()->with('error', 'Post not found.');
+        }
+
+        // Delete photo if it exists
+        if ($single_data->photo && file_exists(public_path('uploads/' . $single_data->photo))) {
+            unlink(public_path('uploads/' . $single_data->photo));
+        }
+
+        $single_data->delete();
+
+        return redirect()->back()->with('success', 'Post is deleted successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $single_data = Post::where('id', $id)->first();
+
+        // Check if post exists
+        if (!$single_data) {
+            return redirect()->back()->with('error', 'Post not found.');
+        }
+
+        // Delete photo if it exists
+        if ($single_data->photo && file_exists(public_path('uploads/' . $single_data->photo))) {
             unlink(public_path('uploads/' . $single_data->photo));
         }
 

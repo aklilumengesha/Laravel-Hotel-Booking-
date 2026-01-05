@@ -17,7 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-4">
 
-                <form action="{{ route('customer_forget_password_submit') }}" method="post">
+                <form action="{{ route('customer.forget_password.submit') }}" method="post">
                     @csrf
                     <div class="login-form">
                         <div class="mb-3">

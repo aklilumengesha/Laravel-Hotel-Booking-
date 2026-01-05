@@ -17,7 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-4">
 
-                <form action="{{ route('customer_reset_password_submit') }}" method="post">
+                <form action="{{ route('customer.reset_password.submit') }}" method="post">
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
                     <input type="hidden" name="email" value="{{ $email }}">

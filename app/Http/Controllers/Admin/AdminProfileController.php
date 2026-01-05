@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use Hash;
 use Auth;
+use Illuminate\Support\Facades\File;
 
 class AdminProfileController extends Controller
 {
-    public function index()
+    public function edit()
     {
+        // return view('admin.profile');
         return view('admin.profile');
     }
 
-    public function profile_submit(Request $request)
+    public function update(Request $request)
     {
         $admin_data = Admin::where('email',Auth::guard('admin')->user()->email)->first();
 
@@ -33,19 +35,23 @@ class AdminProfileController extends Controller
         }
 
         if($request->hasFile('photo')) {
-            $request->validate([
-                'photo' => 'image|mimes:jpg,jpeg,png,gif'
-            ]);
+    $request->validate([
+        'photo' => 'image|mimes:jpg,jpeg,png,gif'
+    ]);
 
-            unlink(public_path('uploads/'.$admin_data->photo));
+    // FIX 1: Safely checks if the old photo exists before deleting
+    if ($admin_data->photo && File::exists(public_path('uploads/'.$admin_data->photo))) {
+        File::delete(public_path('uploads/'.$admin_data->photo));
+    }
 
-            $ext = $request->file('photo')->extension();
-            $final_name = 'admin'.'.'.$ext;
+    $ext = $request->file('photo')->extension();
+    // FIX 2: Creates a unique filename to prevent overwriting
+    $final_name = 'admin_'.time().'.'.$ext;
 
-            $request->file('photo')->move(public_path('uploads/'),$final_name);
+    $request->file('photo')->move(public_path('uploads/'),$final_name);
 
-            $admin_data->photo = $final_name;
-        }
+    $admin_data->photo = $final_name;
+}
 
         
         $admin_data->name = $request->name;

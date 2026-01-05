@@ -3,7 +3,7 @@
 @section('heading', 'Add Photo')
 
 @section('right_top_button')
-<a href="{{ route('admin_photo_view') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
+<a href="{{ route('admin.photo.index') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
 @endsection
 
 @section('main_content')
@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_photo_store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.photo.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

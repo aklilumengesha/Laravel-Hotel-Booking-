@@ -14,7 +14,7 @@ class AdminVideoController extends Controller
         return view('admin.video_view', compact('videos'));
     }
 
-    public function add()
+    public function create()
     {
         return view('admin.video_add');
     }
@@ -22,7 +22,8 @@ class AdminVideoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'video_id' => 'required'
+            'video_id' => 'required',
+            'caption' => 'required'
         ]);
 
         $obj = new Video();
@@ -51,7 +52,7 @@ class AdminVideoController extends Controller
         return redirect()->back()->with('success', 'Video is updated successfully.');
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $single_data = Video::where('id',$id)->first();
         $single_data->delete();

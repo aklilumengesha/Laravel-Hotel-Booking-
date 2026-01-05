@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_page_photo_gallery_update') }}" method="post">
+                    <form action="{{ route('admin.page.photo_gallery.update') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

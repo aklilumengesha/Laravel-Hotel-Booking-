@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin_subscriber_send_email_submit') }}" method="post">
+                    <form action="{{ route('admin.subscriber.send_email.submit') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
